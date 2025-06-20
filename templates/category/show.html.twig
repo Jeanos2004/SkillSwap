@@ -1,30 +1,184 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Category{% endblock %}
+{% block title %}{{ category.name }} | Catégorie | SkillSwap{% endblock %}
 
 {% block body %}
-    <h1>Category</h1>
+    <div class="container mx-auto px-4 py-12">
+        <!-- Hero section avec animation -->
+        <div class="text-center mb-10" data-aos="fade-down">
+            <h1 class="text-4xl font-bold mb-4 gradient-text">{{ category.name }}</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Détails et gestion de la catégorie</p>
+        </div>
+        
+        <!-- Breadcrumb avec animation -->
+        <div class="flex items-center text-sm text-gray-500 mb-8 overflow-x-auto whitespace-nowrap" data-aos="fade-right" data-aos-delay="100">
+            <a href="{{ path('app_home') }}" class="hover:text-primary-600 transition-colors duration-200">Accueil</a>
+            <svg class="mx-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <a href="{{ path('app_category_index') }}" class="hover:text-primary-600 transition-colors duration-200">Catégories</a>
+            <svg class="mx-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-primary-600 font-medium">{{ category.name }}</span>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ category.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ category.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ category.description }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="max-w-4xl mx-auto">
+            <!-- Carte principale avec animation -->
+            <div class="bg-white rounded-2xl premium-shadow overflow-hidden" data-aos="zoom-in" data-aos-delay="200">
+                <!-- Header de la carte -->
+                <div class="bg-gradient-to-r from-primary-700 to-primary-900 p-6 text-white">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-white/10 rounded-lg mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">Détails de la catégorie</h2>
+                            <p class="text-white/80">Informations complètes</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenu de la carte -->
+                <div class="p-6 md:p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="col-span-2 space-y-6" data-aos="fade-right" data-aos-delay="300">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-2 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                                    </svg>
+                                    Nom
+                                </h3>
+                                <p class="text-gray-800 text-lg">{{ category.name }}</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-2 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                    </svg>
+                                    Description
+                                </h3>
+                                <div class="bg-gray-50 p-4 rounded-lg premium-shadow-sm prose prose-primary max-w-none">
+                                    {{ category.description|nl2br }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="md:border-l md:border-gray-200 md:pl-6" data-aos="fade-left" data-aos-delay="400">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                                Informations
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-sm text-gray-600">ID</span>
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800">{{ category.id }}</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-sm text-gray-600">Compétences</span>
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-secondary-100 text-secondary-800">
+                                        {% if category.skills is defined %}
+                                            {{ category.skills|length }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section des compétences associées -->
+            {% if category.skills is defined and category.skills|length > 0 %}
+            <div class="mt-10 bg-white rounded-xl premium-shadow overflow-hidden" data-aos="fade-up" data-aos-delay="500">
+                <div class="bg-gradient-to-r from-secondary-50 to-secondary-100 p-6">
+                    <h3 class="text-xl font-semibold text-secondary-800">Compétences dans cette catégorie</h3>
+                    <p class="text-secondary-600">Liste des compétences associées à cette catégorie</p>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {% for skill in category.skills %}
+                            <a href="{{ path('app_skill_show', {'id': skill.id}) }}" class="block bg-white rounded-lg border border-gray-200 hover:border-secondary-300 hover:shadow-md transition-all duration-300 p-4">
+                                <h4 class="font-medium text-gray-900">{{ skill.title }}</h4>
+                                <p class="text-sm text-gray-500 line-clamp-2 mt-1">{{ skill.description|slice(0, 100) }}{% if skill.description|length > 100 %}...{% endif %}</p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Actions -->
+            <div class="mt-10 flex flex-wrap items-center gap-4" data-aos="fade-up" data-aos-delay="600">
+                <a href="{{ path('app_category_index') }}" class="btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Retour à la liste
+                </a>
+                
+                <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="btn-premium bg-amber-500 hover:bg-amber-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                    Modifier
+                </a>
+                
+                <!-- Zone de danger -->
+                <div class="mt-8 w-full" data-aos="fade-up" data-aos-delay="700">
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-red-800">Zone de danger</h3>
+                                <div class="mt-2 text-sm text-red-700">
+                                    <p>La suppression d'une catégorie est définitive et peut affecter les compétences associées.</p>
+                                </div>
+                                <div class="mt-4">
+                                    {{ include('category/_delete_form.html.twig') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-    <a href="{{ path('app_category_index') }}">back to list</a>
-
-    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
-
-    {{ include('category/_delete_form.html.twig') }}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animation d'entrée pour le titre principal
+            gsap.from('.gradient-text', {
+                y: -50,
+                opacity: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
+            
+            // Animation pour la carte principale
+            gsap.from('.premium-shadow', {
+                y: 30,
+                opacity: 0,
+                duration: 1,
+                delay: 0.3,
+                ease: 'power2.out'
+            });
+        });
+    </script>
 {% endblock %}
