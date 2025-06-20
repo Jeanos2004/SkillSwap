@@ -1,0 +1,20 @@
+{# templates/admin/fields/user.html.twig #}
+{% if field.value %}
+    <div class="flex items-center">
+        <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+            <span class="text-gray-600 text-sm font-medium">
+                {{ field.value.fullName|slice(0, 1)|upper }}
+            </span>
+        </div>
+        <div class="ml-3">
+            <div class="text-sm font-medium text-gray-900">
+                {{ field.value.fullName }}
+            </div>
+            <div class="text-xs text-gray-500">
+                {{ field.value.email }}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <span class="text-gray-500 italic">Aucun utilisateur</span>
+{% endif %}

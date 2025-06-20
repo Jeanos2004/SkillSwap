@@ -1,6 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Nouvelle compétence | SkillSwap{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary-700), var(--primary-900));
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
     <div class="container mx-auto px-4 py-12">
@@ -27,7 +35,7 @@
             <!-- Card principale avec animation -->
             <div class="bg-white rounded-2xl premium-shadow overflow-hidden" data-aos="zoom-in" data-aos-delay="200">
                 <!-- Header de la carte -->
-                <div class="bg-gradient-to-r from-primary-700 to-primary-800 p-6 text-white">
+                <div class="hero-gradient p-6 text-white">
                     <div class="flex items-center">
                         <div class="p-3 bg-white/10 rounded-lg mr-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -35,8 +43,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h2 class="text-2xl text-gray-600 font-bold">Créer une nouvelle compétence</h2>
-                            <p class="text-gray-600">Renseignez les informations ci-dessous</p>
+                            <h2 class="text-2xl text-white font-bold">Créer une nouvelle compétence</h2>
+                            <p class="text-white">Renseignez les informations ci-dessous</p>
                         </div>
                     </div>
                 </div>

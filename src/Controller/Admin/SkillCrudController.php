@@ -3,10 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Skill;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 
 class SkillCrudController extends AbstractCrudController
 {
@@ -15,14 +18,35 @@ class SkillCrudController extends AbstractCrudController
         return Skill::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+        $fields = [
+            IdField::new('id')->hideOnForm(),
+            TextField::new('title', 'Titre'),
+            TextEditorField::new('description', 'Description')->hideOnIndex(),
+            AssociationField::new('category', 'Catégorie'),
+            AssociationField::new('user', 'Créé par')
+                ->setTemplatePath('admin/fields/user.html.twig'),
+            DateTimeField::new('createdAt', 'Créé le')
+                ->setFormat('dd/MM/yyyy HH:mm')
+                ->hideOnForm(),
         ];
+
+        if ($pageName === Crud::PAGE_EDIT) {
+            $fields[] = DateTimeField::new('updatedAt', 'Mis à jour le')
+                ->setFormTypeOption('disabled', true);
+        }
+
+        return $fields;
     }
-    */
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setPageTitle('index', 'Compétences')
+            ->setPageTitle('new', 'Créer une compétence')
+            ->setPageTitle('edit', 'Modifier la compétence')
+            ->setSearchFields(['title', 'description', 'user.email', 'user.firstName', 'user.lastName'])
+            ->setDefaultSort(['createdAt' => 'DESC']);
+    }
 }
