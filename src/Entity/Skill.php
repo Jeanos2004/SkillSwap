@@ -22,6 +22,9 @@ class Skill
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $createdAt = null;
+
     #[ORM\ManyToOne(inversedBy: 'skills')]
     private ?Category $category = null;
 
@@ -44,6 +47,7 @@ class Skill
     {
         $this->offeredInExchanges = new ArrayCollection();
         $this->requestedInExchanges = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -72,6 +76,17 @@ class Skill
     {
         $this->description = $description;
 
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
         return $this;
     }
 

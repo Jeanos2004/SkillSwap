@@ -7,13 +7,15 @@
         <h1 class="text-3xl font-bold mb-6">Modifier votre avis</h1>
 
         <div class="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-200">
-            <h2 class="text-xl font-semibold mb-4">Avis sur {{ review.reviewee.fullName }}</h2>
+            <h2 class="text-xl font-semibold mb-4">
+                Avis sur {{ review.reviewee is defined and review.reviewee ? review.reviewee.fullName : 'Utilisateur inconnu' }}
+            </h2>
             
             <div class="mb-4">
                 <div class="flex items-center mb-2">
                     <span class="font-medium mr-2">Pour l'échange:</span>
                     <a href="{{ path('app_exchange_show', {'id': review.exchange.id}) }}" class="text-blue-600 hover:underline">
-                        {{ review.exchange.offeredSkill.name }} ↔ {{ review.exchange.requestedSkill.name }}
+                        {{ review.exchange.offeredSkill.title }} ↔ {{ review.exchange.requestedSkill.title }}
                     </a>
                 </div>
                 <div class="text-sm text-gray-500">
@@ -22,36 +24,38 @@
             </div>
         </div>
 
-        <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200">
-            {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-                <div class="mb-4">
-                    {{ form_label(form.rating, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                    <div class="mt-1">
-                        {{ form_widget(form.rating, {'attr': {'class': 'flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4'}}) }}
-                    </div>
-                    {{ form_errors(form.rating, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+        {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+            <div class="mb-4">
+                {{ form_label(form.rating, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                <div class="mt-1">
+                    {{ form_widget(form.rating, {'attr': {'class': 'flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4'}}) }}
                 </div>
+                {{ form_errors(form.rating, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+            </div>
 
-                <div class="mb-4">
-                    {{ form_label(form.comment, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                    <div class="mt-1">
-                        {{ form_widget(form.comment) }}
-                    </div>
-                    {{ form_errors(form.comment, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+            <div class="mb-4">
+                {{ form_label(form.comment, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                <div class="mt-1">
+                    {{ form_widget(form.comment, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500'}}) }}
                 </div>
+                {{ form_errors(form.comment, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+            </div>
 
-                <div class="flex justify-between mt-6">
-                    <a href="{{ path('app_review_index') }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Annuler</a>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Enregistrer les modifications</button>
+            <div class="flex justify-between mt-6">
+                <a href="{{ path('app_review_index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    Annuler
+                </a>
+                <div class="space-x-3">
+                    <button type="submit" class="btn-premium bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md">
+                        Enregistrer les modifications
+                    </button>
+                    <a href="{{ path('app_review_delete', {'id': review.id}) }}" 
+                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')" 
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Supprimer
+                    </a>
                 </div>
-            {{ form_end(form) }}
-        </div>
-
-        <div class="mt-4">
-            <form method="post" action="{{ path('app_review_delete', {'id': review.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet avis?');" class="inline-block">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ review.id) }}">
-                <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Supprimer cet avis</button>
-            </form>
-        </div>
+            </div>
+        {{ form_end(form) }}
     </div>
 {% endblock %}
