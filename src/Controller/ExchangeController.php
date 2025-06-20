@@ -40,15 +40,24 @@ final class ExchangeController extends AbstractController
     #[Route('/new', name: 'app_exchange_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
         $exchange = new Exchange();
-        $exchange->setOfferer($this->getUser());
+        $exchange->setOfferer($user);
         $exchange->setStatus('pending');
         $exchange->setCreatedAt(new \DateTime());
         
-        $form = $this->createForm(ExchangeForm::class, $exchange);
+        $form = $this->createForm(ExchangeForm::class, $exchange, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Définir automatiquement le destinataire comme étant le propriétaire de la compétence demandée
+            $requestedSkill = $exchange->getRequestedSkill();
+            if ($requestedSkill) {
+                $exchange->setReceiver($requestedSkill->getUser());
+            }
+            
             $entityManager->persist($exchange);
             $entityManager->flush();
 
@@ -58,7 +67,7 @@ final class ExchangeController extends AbstractController
 
         return $this->render('exchange/new.html.twig', [
             'exchange' => $exchange,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -140,7 +149,7 @@ final class ExchangeController extends AbstractController
 
         return $this->render('exchange/edit.html.twig', [
             'exchange' => $exchange,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 

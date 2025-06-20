@@ -21,6 +21,9 @@ class Exchange
     #[ORM\Column]
     private ?\DateTime $createdAt = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private $message;
+
     #[ORM\ManyToOne(inversedBy: 'offeredExchanges')]
     private ?User $offerer = null;
 
@@ -73,6 +76,18 @@ class Exchange
 
         return $this;
     }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?string $message): self
+    {
+        $this->message = $message;
+        return $this;
+    }
+
 
     public function getOfferer(): ?User
     {
