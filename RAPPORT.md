@@ -1,5 +1,10 @@
 # Rapport de Projet : SkillSwap
 
+**Auteur** : Jean Keloua OUAMOUNO  
+**Niveau** : Licence 3 en Développement Logiciel  
+**Matricule** : 664126142282  
+**Date** : 20 Juin 2025
+
 ## Table des matières
 - [1. Introduction](#1-introduction)
 - [2. Contexte du projet](#2-contexte-du-projet)
@@ -25,9 +30,11 @@ SkillSwap est une plateforme web innovante permettant aux utilisateurs d'échang
 Le développement de SkillSwap s'inscrit dans un contexte d'économie collaborative et de partage de connaissances. La plateforme vise à créer une communauté où les utilisateurs peuvent échanger leurs compétences de manière équitable et sécurisée.
 
 ### 2.2 Équipe et durée
-- **Porteur du projet** : [Votre nom]
-- **Durée du projet** : [Durée]
-- **Date de livraison** : [Date]
+- **Étudiant** : Jean Keloua OUAMOUNO
+- **Niveau** : Licence 3 en Développement Logiciel
+- **Matricule** : 664126142282
+- **Durée du projet** : 6 mois
+- **Date de livraison** : 20 Juin 2025
 
 ## 3. Objectifs
 

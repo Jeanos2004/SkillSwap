@@ -1,5 +1,11 @@
 # SkillSwap - Plateforme d'échange de compétences
 
+## 👤 Auteur
+**Nom** : Jean Keloua OUAMOUNO  
+**Niveau** : Licence 3 en Développement Logiciel  
+**Matricule** : 664126142282  
+**Date** : Juin 2025
+
 [![Symfony](https://img.shields.io/badge/Symfony-7.x-2C8EBB?logo=symfony)](https://symfony.com/)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)](https://www.php.net/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.0+-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
@@ -252,6 +258,6 @@ Pour toute question ou problème, veuillez ouvrir une issue sur le dépôt GitHu
 
 ## 📧 Contact
 
-Jean Dupont - [@votretwitter](https://twitter.com/votretwitter) - jean.dupont@example.com
+Jean Keloua OUAMOUNO - [jeankelouaouamouno@gmail.com](mailto:jeankelouaouamouno@gmail.com) - 664126142282
 
 Lien du projet : [https://github.com/Jeanos2004/SkillSwap](https://github.com/Jeanos2004/SkillSwap)
