@@ -1,37 +1,145 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Category index{% endblock %}
+{% block title %}Catégories | SkillSwap{% endblock %}
 
 {% block body %}
-    <h1>Category index</h1>
+    <div class="container mx-auto px-4 py-12">
+        <!-- Hero section avec animation -->
+        <div class="text-center mb-10" data-aos="fade-down">
+            <h1 class="text-4xl font-bold mb-4 gradient-text">Catégories de compétences</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Explorez et gérez les différentes catégories de compétences disponibles sur la plateforme</p>
+        </div>
+        
+        <!-- Breadcrumb avec animation -->
+        <div class="flex items-center text-sm text-gray-500 mb-8 overflow-x-auto whitespace-nowrap" data-aos="fade-right" data-aos-delay="100">
+            <a href="{{ path('app_home') }}" class="hover:text-primary-600 transition-colors duration-200">Accueil</a>
+            <svg class="mx-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-primary-600 font-medium">Catégories</span>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for category in categories %}
-            <tr>
-                <td>{{ category.id }}</td>
-                <td>{{ category.name }}</td>
-                <td>{{ category.description }}</td>
-                <td>
-                    <a href="{{ path('app_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-2xl font-bold text-gray-800">Liste des catégories</h2>
+                <p class="text-gray-600">Gérez les catégories pour organiser les compétences</p>
+            </div>
+            <a href="{{ path('app_category_new') }}" class="btn-premium bg-gradient-to-r from-primary-600 to-primary-700 text-white font-medium px-5 py-2.5 rounded-lg shadow-lg hover:shadow-primary-500/30 transition-all duration-300 transform hover:scale-105 flex items-center" data-aos="fade-left" data-aos-delay="200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Ajouter une catégorie
+            </a>
+        </div>
 
-    <a href="{{ path('app_category_new') }}">Create new</a>
+        <!-- Barre de recherche -->
+        <div class="mb-6" data-aos="fade-up" data-aos-delay="150">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <input type="text" id="category-search" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 premium-shadow-sm" placeholder="Rechercher une catégorie...">
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl premium-shadow overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200" id="categories-table">
+                    <thead class="bg-gradient-to-r from-primary-50 to-primary-100">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">ID</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">Nom</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">Description</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    {% for category in categories %}
+                        <tr class="hover:bg-gray-50 transition-colors duration-150" data-aos="fade-up" data-aos-delay="{{ 200 + loop.index * 50 }}">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">{{ category.id }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ category.name }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-gray-500 line-clamp-2">{{ category.description }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex items-center space-x-3">
+                                    <a href="{{ path('app_category_show', {'id': category.id}) }}" class="text-primary-600 hover:text-primary-900 transition-colors duration-200" title="Voir les détails">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                    <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="text-amber-600 hover:text-amber-900 transition-colors duration-200" title="Modifier">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-12 text-center">
+                                <div class="flex flex-col items-center">
+                                    <svg class="h-12 w-12 text-gray-300 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                    <p class="text-gray-500 text-lg font-medium mb-2">Aucune catégorie trouvée</p>
+                                    <p class="text-gray-400 mb-6">Commencez par créer votre première catégorie</p>
+                                    <a href="{{ path('app_category_new') }}" class="btn-premium bg-gradient-to-r from-primary-600 to-primary-700 text-white font-medium px-5 py-2.5 rounded-lg shadow-lg hover:shadow-primary-500/30 transition-all duration-300 transform hover:scale-105 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        Créer une catégorie
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animation d'entrée pour le titre principal
+            gsap.from('.gradient-text', {
+                y: -50,
+                opacity: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
+            
+            // Filtrage des catégories
+            const searchInput = document.getElementById('category-search');
+            const table = document.getElementById('categories-table');
+            const rows = table.querySelectorAll('tbody tr');
+            
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                rows.forEach(row => {
+                    const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    const description = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || description.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

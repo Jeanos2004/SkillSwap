@@ -3,47 +3,104 @@
 {% block title %}Accueil - SkillSwap{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-center">Bienvenue sur SkillSwap</h1>
+<div class="container mx-auto px-4 py-12">
+    <h1 class="text-5xl font-bold mb-10 text-center gradient-text">
+        Bienvenue sur Skill<span class="text-primary-700">Swap</span>
+    </h1>
     
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="bg-{{ label == 'success' ? 'green' : 'red' }}-100 border border-{{ label == 'success' ? 'green' : 'red' }}-400 text-{{ label == 'success' ? 'green' : 'red' }}-700 px-4 py-3 rounded mb-4" role="alert">
-                <p>{{ message }}</p>
+            {% set alert_type = (label == 'success') ? 'secondary' : 'red' %}
+            {% set border_color = (label == 'success') ? 'secondary-500' : 'red-500' %}
+            {% set text_color = (label == 'success') ? 'secondary-700' : 'red-700' %}
+            {% set bg_color = (label == 'success') ? 'secondary-50' : 'red-50' %}
+            <div class="bg-{{ bg_color }} border-l-4 border-{{ border_color }} text-{{ text_color }} p-4 mb-6 rounded-md shadow-md premium-shadow" role="alert">
+                <div class="flex">
+                    <div class="py-1">
+                        {% if label == 'success' %}
+                            <svg class="fill-current h-6 w-6 text-{{ border_color }} mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg>
+                        {% else %}
+                            <svg class="fill-current h-6 w-6 text-{{ border_color }} mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 5v6h2V5H9zm0 8h2v2H9v-2z"/></svg>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <p class="font-bold">{{ label|capitalize }}</p>
+                        <p class="text-sm">{{ message }}</p>
+                    </div>
+                </div>
             </div>
         {% endfor %}
     {% endfor %}
     
-    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 class="text-2xl font-semibold mb-4">Échangez vos compétences</h2>
-        <p class="mb-4">SkillSwap est une plateforme qui vous permet d'échanger vos compétences avec d'autres utilisateurs.</p>
+    <div class="bg-white premium-shadow rounded-xl p-8 mb-10 text-center">
+        <h2 class="text-3xl font-semibold mb-4 text-primary-800">Échangez vos compétences, enrichissez votre savoir.</h2>
+        <p class="mb-6 text-gray-600 max-w-2xl mx-auto">
+            SkillSwap est la plateforme idéale pour partager votre expertise, apprendre de nouvelles choses et rencontrer des passionnés comme vous.
+        </p>
         
         {% if app.user %}
-            <p class="mb-4">Bonjour <strong>{{ app.user.fullName }}</strong>, vous êtes connecté !</p>
-            <div class="flex space-x-4">
-                <a href="{{ path('app_profile') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Mon profil</a>
-                <a href="{{ path('app_logout') }}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Déconnexion</a>
+            <p class="mb-6 text-lg text-gray-700">Bonjour <strong class="text-primary-700">{{ app.user.fullName }}</strong>, prêt à échanger ?</p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <a href="{{ path('app_profile') }}" class="btn-premium bg-primary-600 hover:bg-primary-700 text-white w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                    Mon Profil
+                </a>
+                <a href="{{ path('app_exchange_new') }}" class="btn-premium bg-secondary-600 hover:bg-secondary-700 text-white w-full sm:w-auto">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M8 9a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 1h6v8H7V6z" clip-rule="evenodd" /></svg>
+                    Proposer un échange
+                </a>
+                <a href="{{ path('app_logout') }}" class="btn-premium bg-gray-500 hover:bg-gray-600 text-white w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V7.414L11.414 3H3zm6.293 11.293a1 1 0 001.414 1.414l4-4a1 1 0 000-1.414l-4-4a1 1 0 00-1.414 1.414L11.586 9H7a1 1 0 100 2h4.586l-2.293 2.293z" clip-rule="evenodd" /></svg>
+                    Déconnexion
+                </a>
             </div>
         {% else %}
-            <div class="flex space-x-4">
-                <a href="{{ path('app_login') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Connexion</a>
-                <a href="{{ path('app_register') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Inscription</a>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <a href="{{ path('app_login') }}" class="btn-premium bg-primary-600 hover:bg-primary-700 text-white w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V7.414L11.414 3H3zm6.293 11.293a1 1 0 001.414 1.414l4-4a1 1 0 000-1.414l-4-4a1 1 0 00-1.414 1.414L11.586 9H7a1 1 0 100 2h4.586l-2.293 2.293z" clip-rule="evenodd" /></svg>
+                    Connexion
+                </a>
+                <a href="{{ path('app_register') }}" class="btn-premium bg-accent-500 hover:bg-accent-600 text-white w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M8 9a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 1h6v8H7V6z" clip-rule="evenodd" /></svg>
+                    Inscription
+                </a>
             </div>
         {% endif %}
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h3 class="text-xl font-semibold mb-3">Proposez vos compétences</h3>
-            <p>Partagez votre savoir-faire et aidez les autres à apprendre de nouvelles compétences.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white premium-shadow rounded-xl p-8 hover:shadow-accent-500/30 transition-shadow duration-300">
+            <div class="flex justify-center mb-4">
+                <div class="bg-primary-100 p-3 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-center text-primary-700">Proposez vos Compétences</h3>
+            <p class="text-gray-600 text-sm text-center leading-relaxed">Partagez votre savoir-faire unique et aidez les autres à s'épanouir en apprenant de nouvelles choses.</p>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h3 class="text-xl font-semibold mb-3">Trouvez des mentors</h3>
-            <p>Découvrez des personnes talentueuses qui peuvent vous aider à développer vos compétences.</p>
+        <div class="bg-white premium-shadow rounded-xl p-8 hover:shadow-secondary-500/30 transition-shadow duration-300">
+            <div class="flex justify-center mb-4">
+                <div class="bg-secondary-100 p-3 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-center text-secondary-700">Trouvez des Mentors</h3>
+            <p class="text-gray-600 text-sm text-center leading-relaxed">Découvrez des experts passionnés prêts à vous guider et à accélérer votre développement personnel et professionnel.</p>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h3 class="text-xl font-semibold mb-3">Créez votre réseau</h3>
-            <p>Connectez-vous avec d'autres passionnés et élargissez votre réseau professionnel.</p>
+        <div class="bg-white premium-shadow rounded-xl p-8 hover:shadow-primary-500/30 transition-shadow duration-300">
+            <div class="flex justify-center mb-4">
+                <div class="bg-accent-100 p-3 rounded-full">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-accent-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-center text-accent-700">Créez votre Réseau</h3>
+            <p class="text-gray-600 text-sm text-center leading-relaxed">Connectez-vous avec une communauté dynamique, échangez des idées et bâtissez des relations durables.</p>
         </div>
     </div>
 </div>

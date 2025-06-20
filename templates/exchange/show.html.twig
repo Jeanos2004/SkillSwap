@@ -1,103 +1,131 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail de l'échange{% endblock %}
+{% block title %}Détail de l'échange - {{ exchange.offeredSkill.name }} vs {{ exchange.requestedSkill.name }} - SkillSwap{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-6">Détail de l'échange</h1>
+    <div class="container mx-auto px-4 py-12">
+        <div class="mb-10">
+            <h1 class="text-4xl font-bold text-primary-800 mb-2">Détail de l'Échange</h1>
+            <p class="text-xl text-gray-600">{{ exchange.offeredSkill.name }} <span class="text-gray-400 font-light">vs</span> {{ exchange.requestedSkill.name }}</p>
+        </div>
 
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <div class="mb-4 p-4 rounded-lg {% if label == 'success' %}bg-green-100 text-green-800{% elseif label == 'error' %}bg-red-100 text-red-800{% else %}bg-blue-100 text-blue-800{% endif %}">
-                    {{ message }}
+                {% set alert_type = 'info' %}
+                {% set icon_path = 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' %}
+                {% set border_color = 'blue-500' %}
+                {% set text_color = 'blue-700' %}
+                {% set bg_color = 'blue-50' %}
+
+                {% if label == 'success' %}
+                    {% set alert_type = 'success' %}
+                    {% set icon_path = 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' %}
+                    {% set border_color = 'secondary-500' %}
+                    {% set text_color = 'secondary-700' %}
+                    {% set bg_color = 'secondary-50' %}
+                {% elseif label == 'error' or label == 'danger' %}
+                    {% set alert_type = 'error' %}
+                    {% set icon_path = 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' %}
+                    {% set border_color = 'red-500' %}
+                    {% set text_color = 'red-700' %}
+                    {% set bg_color = 'red-50' %}
+                {% elseif label == 'warning' %}
+                    {% set alert_type = 'warning' %}
+                    {% set icon_path = 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' %}
+                    {% set border_color = 'yellow-500' %}
+                    {% set text_color = 'yellow-700' %}
+                    {% set bg_color = 'yellow-50' %}
+                {% endif %}
+
+                <div class="bg-{{ bg_color }} border-l-4 border-{{ border_color }} text-{{ text_color }} p-4 mb-6 rounded-md shadow-md premium-shadow-sm" role="alert">
+                    <div class="flex">
+                        <div class="py-1">
+                            <svg class="fill-current h-6 w-6 text-{{ border_color }} mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ icon_path }}" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-bold">{{ label|capitalize }}</p>
+                            <p class="text-sm">{{ message }}</p>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
         {% endfor %}
 
-        <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 mb-6">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold">Informations sur l'échange</h2>
-                <span class="px-3 py-1 rounded-full text-sm font-medium
-                    {% if exchange.status == 'pending' %}bg-yellow-100 text-yellow-800
-                    {% elseif exchange.status == 'accepted' %}bg-blue-100 text-blue-800
-                    {% elseif exchange.status == 'rejected' %}bg-red-100 text-red-800
-                    {% elseif exchange.status == 'completed' %}bg-green-100 text-green-800
+        <div class="bg-white premium-shadow rounded-xl p-8 mb-10">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pb-6 border-b border-gray-200">
+                <div>
+                    <h2 class="text-2xl font-semibold text-primary-700 mb-1">Informations sur l'échange</h2>
+                    <p class="text-sm text-gray-500">Créé le {{ exchange.createdAt ? exchange.createdAt|date('d/m/Y à H:i') : 'N/A' }}</p>
+                </div>
+                <span class="px-4 py-1.5 inline-flex text-sm leading-5 font-bold rounded-full border mt-3 sm:mt-0
+                    {% if exchange.status == 'pending' %}bg-yellow-100 text-yellow-800 border-yellow-300
+                    {% elseif exchange.status == 'accepted' %}bg-secondary-100 text-secondary-800 border-secondary-300
+                    {% elseif exchange.status == 'rejected' %}bg-red-100 text-red-800 border-red-300
+                    {% elseif exchange.status == 'completed' %}bg-green-100 text-green-800 border-green-300
+                    {% else %}bg-gray-100 text-gray-800 border-gray-300
                     {% endif %}">
                     {{ exchange.status|capitalize }}
                 </span>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h3 class="text-lg font-medium mb-3">Compétence offerte</h3>
-                    <div class="bg-gray-50 p-4 rounded-md">
-                        <div class="flex items-center mb-2">
-                            <span class="font-medium mr-2">Nom:</span>
-                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">{{ exchange.offeredSkill.name }}</span>
-                        </div>
-                        <div class="mb-2">
-                            <span class="font-medium mr-2">Description:</span>
-                            <span>{{ exchange.offeredSkill.description }}</span>
-                        </div>
-                        <div>
-                            <span class="font-medium mr-2">Offert par:</span>
-                            <span class="text-blue-600">{{ exchange.offerer.fullName }}</span>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-xl premium-shadow-sm">
+                    <h3 class="text-xl font-semibold text-primary-600 mb-4">Compétence Offerte</h3>
+                    <div class="mb-3">
+                        <span class="px-3 py-1.5 text-sm font-semibold rounded-full bg-primary-100 text-primary-800 border border-primary-200">{{ exchange.offeredSkill.name }}</span>
+                    </div>
+                    <div class="text-gray-700 mb-3 prose prose-sm max-w-none">
+                        {{ exchange.offeredSkill.description|nl2br }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-500">Offert par :</span>
+                        <span class="text-secondary-600 font-semibold">{{ exchange.offerer.fullName }}</span> {# TODO: Link to profile #}
                     </div>
                 </div>
 
-                <div>
-                    <h3 class="text-lg font-medium mb-3">Compétence demandée</h3>
-                    <div class="bg-gray-50 p-4 rounded-md">
-                        <div class="flex items-center mb-2">
-                            <span class="font-medium mr-2">Nom:</span>
-                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded">{{ exchange.requestedSkill.name }}</span>
-                        </div>
-                        <div class="mb-2">
-                            <span class="font-medium mr-2">Description:</span>
-                            <span>{{ exchange.requestedSkill.description }}</span>
-                        </div>
-                        <div>
-                            <span class="font-medium mr-2">Demandé par:</span>
-                            <span class="text-blue-600">{{ exchange.receiver.fullName }}</span>
-                        </div>
+                <div class="bg-gray-50 p-6 rounded-xl premium-shadow-sm">
+                    <h3 class="text-xl font-semibold text-primary-600 mb-4">Compétence Demandée</h3>
+                    <div class="mb-3">
+                        <span class="px-3 py-1.5 text-sm font-semibold rounded-full bg-secondary-100 text-secondary-800 border border-secondary-200">{{ exchange.requestedSkill.name }}</span>
+                    </div>
+                    <div class="text-gray-700 mb-3 prose prose-sm max-w-none">
+                        {{ exchange.requestedSkill.description|nl2br }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-500">Demandé par :</span>
+                        <span class="text-secondary-600 font-semibold">{{ exchange.receiver.fullName }}</span> {# TODO: Link to profile #}
                     </div>
                 </div>
-            </div>
-
-            <div class="mt-4">
-                <div class="font-medium">Date de création:</div>
-                <div class="text-gray-600">{{ exchange.createdAt ? exchange.createdAt|date('d/m/Y à H:i') : '' }}</div>
             </div>
         </div>
 
         {% if exchange.reviews|length > 0 %}
-        <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Avis sur cet échange</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white premium-shadow rounded-xl p-8 mt-10">
+            <h2 class="text-2xl font-semibold text-primary-700 mb-6">Avis sur cet échange</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {% for review in exchange.reviews %}
-                    <div class="bg-gray-50 p-4 rounded-md">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="font-medium">Avis de {{ review.reviewer.fullName }}</div>
-                            <div class="flex">
+                    <div class="bg-gray-50 p-6 rounded-lg premium-shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <div class="flex justify-between items-center mb-3">
+                            <div class="font-semibold text-primary-700">Avis de {{ review.reviewer.fullName }}</div>
+                            <div class="flex items-center">
                                 {% for i in 1..5 %}
-                                    {% if i <= review.rating %}
-                                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                        </svg>
-                                    {% else %}
-                                        <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                        </svg>
-                                    {% endif %}
+                                    <svg class="h-5 w-5 {% if i <= review.rating %}text-yellow-400{% else %}text-gray-300{% endif %}" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
                                 {% endfor %}
+                                <span class="ml-1.5 text-sm text-gray-600">({{ review.rating }}/5)</span>
                             </div>
                         </div>
-                        <p class="text-gray-700 mb-2">{{ review.comment|nl2br }}</p>
-                        <div class="text-sm text-gray-500">{{ review.createdAt|date('d/m/Y') }}</div>
+                        <div class="text-gray-700 mb-3 prose prose-sm max-w-none">{{ review.comment|nl2br }}</div>
+                        <div class="text-xs text-gray-400">Posté le {{ review.createdAt|date('d/m/Y') }}</div>
                         {% if app.user == review.reviewer %}
-                            <div class="mt-2">
-                                <a href="{{ path('app_review_edit', {'id': review.id}) }}" class="text-blue-600 hover:underline text-sm">Modifier mon avis</a>
+                            <div class="mt-3">
+                                <a href="{{ path('app_review_edit', {'id': review.id}) }}" class="btn-link text-accent-600 hover:text-accent-700 text-sm inline-flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                                    Modifier mon avis
+                                </a>
                             </div>
                         {% endif %}
                     </div>
@@ -106,22 +134,36 @@
         </div>
         {% endif %}
 
-        <div class="flex flex-wrap gap-2 mb-6">
-            <a href="{{ path('app_exchange_index') }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Retour à la liste</a>
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+            <a href="{{ path('app_exchange_index') }}" class="btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Retour à la liste
+            </a>
             
             {% if is_granted('EDIT', exchange) %}
-                <a href="{{ path('app_exchange_edit', {'id': exchange.id}) }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Modifier</a>
+                <a href="{{ path('app_exchange_edit', {'id': exchange.id}) }}" class="btn-premium bg-accent-500 hover:bg-accent-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                    Modifier
+                </a>
             {% endif %}
 
             {% if exchange.status == 'pending' %}
                 {% if app.user == exchange.receiver or is_granted('ROLE_ADMIN') %}
                     <form method="post" action="{{ path('app_exchange_accept', {'id': exchange.id}) }}" class="inline-block">
                         <input type="hidden" name="_token" value="{{ csrf_token('accept' ~ exchange.id) }}">
-                        <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Accepter</button>
+                        <button class="btn-premium bg-green-500 hover:bg-green-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                            Accepter
+                        </button>
                     </form>
                     <form method="post" action="{{ path('app_exchange_reject', {'id': exchange.id}) }}" class="inline-block">
                         <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ exchange.id) }}">
-                        <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Rejeter</button>
+                        <button class="btn-premium bg-red-500 hover:bg-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+                            Rejeter
+                        </button>
                     </form>
                 {% endif %}
             {% endif %}
@@ -130,14 +172,20 @@
                 {% if app.user == exchange.offerer or app.user == exchange.receiver or is_granted('ROLE_ADMIN') %}
                     <form method="post" action="{{ path('app_exchange_complete', {'id': exchange.id}) }}" class="inline-block">
                         <input type="hidden" name="_token" value="{{ csrf_token('complete' ~ exchange.id) }}">
-                        <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Marquer comme terminé</button>
+                        <button class="btn-premium bg-secondary-500 hover:bg-secondary-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.469 6.469a1 1 0 011.414-1.414l1 1a1 1 0 01-1.414 1.414l-1-1zM6.343 12l-1-1a1 1 0 111.414-1.414l1 1a1 1 0 01-1.414 1.414zM10 14a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>
+                            Marquer comme terminé
+                        </button>
                     </form>
                 {% endif %}
             {% endif %}
 
             {% if exchange.status == 'completed' %}
                 {% if (app.user == exchange.offerer or app.user == exchange.receiver) and not exchange.reviews|filter(review => review.reviewer == app.user)|length %}
-                    <a href="{{ path('app_review_new', {'id': exchange.id}) }}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Laisser un avis</a>
+                    <a href="{{ path('app_review_new', {'id': exchange.id}) }}" class="btn-premium bg-primary-500 hover:bg-primary-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                        Laisser un avis
+                    </a>
                 {% endif %}
             {% endif %}
 

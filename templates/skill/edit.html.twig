@@ -1,13 +1,128 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Skill{% endblock %}
+{% block title %}Modifier une compétence | SkillSwap{% endblock %}
 
 {% block body %}
-    <h1>Edit Skill</h1>
+    <div class="container mx-auto px-4 py-12">
+        <!-- Hero section avec animation -->
+        <div class="text-center mb-10" data-aos="fade-down">
+            <h1 class="text-4xl font-bold mb-4 gradient-text">Modifier une compétence</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Mettez à jour les informations de votre compétence</p>
+        </div>
+        
+        <!-- Breadcrumb avec animation -->
+        <div class="flex items-center text-sm text-gray-500 mb-8 overflow-x-auto whitespace-nowrap" data-aos="fade-right" data-aos-delay="100">
+            <a href="{{ path('app_home') }}" class="hover:text-primary-600 transition-colors duration-200">Accueil</a>
+            <svg class="mx-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <a href="{{ path('app_skill_index') }}" class="hover:text-primary-600 transition-colors duration-200">Compétences</a>
+            <svg class="mx-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <a href="{{ path('app_skill_show', {'id': skill.id}) }}" class="hover:text-primary-600 transition-colors duration-200">{{ skill.title }}</a>
+            <svg class="mx-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-primary-600 font-medium">Modifier</span>
+        </div>
 
-    {{ include('skill/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="max-w-5xl mx-auto">
+            <!-- Card principale avec animation -->
+            <div class="bg-white rounded-2xl premium-shadow overflow-hidden" data-aos="zoom-in" data-aos-delay="200">
+                <!-- Header de la carte -->
+                <div class="bg-gradient-to-r from-amber-600 to-amber-700 p-6 text-white">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-white/10 rounded-lg mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">Modifier la compétence</h2>
+                            <p class="text-white/80">{{ skill.title }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenu de la carte -->
+                <div class="p-6 md:p-8">
+                    <!-- Message d'information -->
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-lg premium-shadow-sm" data-aos="fade-up" data-aos-delay="300">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-amber-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-amber-800 font-medium">Modification de compétence</h3>
+                                <p class="mt-1 text-amber-700 text-sm">
+                                    La modification de cette compétence affectera tous les échanges associés. Assurez-vous que vos changements sont pertinents et précis.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-    <a href="{{ path('app_skill_index') }}">back to list</a>
+                    <!-- Formulaire -->
+                    {{ include('skill/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+                </div>
+            </div>
+            
+            <!-- Zone de danger -->
+            <div class="mt-8 bg-white rounded-xl premium-shadow overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-red-600 mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        Zone de danger
+                    </h3>
+                    <p class="text-gray-600 mb-6">
+                        Attention : la suppression d'une compétence est définitive et entraînera également la suppression de tous les échanges associés à cette compétence.
+                    </p>
+                    {{ include('skill/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-    {{ include('skill/_delete_form.html.twig') }}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animation d'entrée pour le titre principal
+            gsap.from('.gradient-text', {
+                y: -50,
+                opacity: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
+            
+            // Animation pour les cartes
+            gsap.from('.premium-shadow', {
+                scrollTrigger: {
+                    trigger: '.premium-shadow',
+                    start: 'top bottom-=100px',
+                },
+                opacity: 0,
+                y: 30,
+                stagger: 0.2,
+                duration: 0.8,
+                ease: 'power2.out'
+            });
+            
+            // Animation spéciale pour la zone de danger
+            gsap.from('.text-red-600', {
+                scrollTrigger: {
+                    trigger: '.text-red-600',
+                    start: 'top bottom-=50px',
+                },
+                color: '#6B7280',
+                duration: 1.5,
+                ease: 'power2.inOut'
+            });
+        });
+    </script>
 {% endblock %}

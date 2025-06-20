@@ -1,79 +1,131 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes échanges{% endblock %}
+{% block title %}Mes échanges - SkillSwap{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold">Mes échanges</h1>
-            <a href="{{ path('app_exchange_new') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Proposer un échange</a>
+    <div class="container mx-auto px-4 py-12">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10">
+            <div>
+                <h1 class="text-4xl font-bold text-primary-800 mb-2">Mes Échanges</h1>
+                <p class="text-lg text-gray-600">Suivez, gérez et initiez vos échanges de compétences.</p>
+            </div>
+            <a href="{{ path('app_exchange_new') }}" class="btn-premium bg-accent-500 hover:bg-accent-600 text-white mt-4 sm:mt-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                </svg>
+                Proposer un échange
+            </a>
         </div>
 
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <div class="mb-4 p-4 rounded-lg {% if label == 'success' %}bg-green-100 text-green-800{% elseif label == 'error' %}bg-red-100 text-red-800{% else %}bg-blue-100 text-blue-800{% endif %}">
-                    {{ message }}
+                {% set alert_type = 'info' %}
+                {% set icon_path = 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' %}
+                {% set border_color = 'blue-500' %}
+                {% set text_color = 'blue-700' %}
+                {% set bg_color = 'blue-50' %}
+
+                {% if label == 'success' %}
+                    {% set alert_type = 'success' %}
+                    {% set icon_path = 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' %}
+                    {% set border_color = 'secondary-500' %}
+                    {% set text_color = 'secondary-700' %}
+                    {% set bg_color = 'secondary-50' %}
+                {% elseif label == 'error' or label == 'danger' %}
+                    {% set alert_type = 'error' %}
+                    {% set icon_path = 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' %}
+                    {% set border_color = 'red-500' %}
+                    {% set text_color = 'red-700' %}
+                    {% set bg_color = 'red-50' %}
+                {% elseif label == 'warning' %}
+                    {% set alert_type = 'warning' %}
+                    {% set icon_path = 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' %}
+                    {% set border_color = 'yellow-500' %}
+                    {% set text_color = 'yellow-700' %}
+                    {% set bg_color = 'yellow-50' %}
+                {% endif %}
+
+                <div class="bg-{{ bg_color }} border-l-4 border-{{ border_color }} text-{{ text_color }} p-4 mb-6 rounded-md shadow-md premium-shadow-sm" role="alert">
+                    <div class="flex">
+                        <div class="py-1">
+                            <svg class="fill-current h-6 w-6 text-{{ border_color }} mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ icon_path }}" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-bold">{{ label|capitalize }}</p>
+                            <p class="text-sm">{{ message }}</p>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
         {% endfor %}
 
-        <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 mb-6">
+        <div class="bg-white premium-shadow rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
                 {% if exchanges|length > 0 %}
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                <table class="min-w-full divide-y divide-gray-100">
+                    <thead class="bg-primary-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compétences échangées</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participants</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">Compétences Échangées</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">Participants</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">Statut</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">Date Création</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                     {% for exchange in exchanges %}
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4">
-                                <div class="flex flex-col">
-                                    <div class="flex items-center">
-                                        <span class="font-medium mr-2">Offert:</span>
-                                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">{{ exchange.offeredSkill.name }}</span>
+                        <tr class="hover:bg-gray-50 transition-colors duration-150">
+                            <td class="px-6 py-4 align-top">
+                                <div class="space-y-1.5">
+                                    <div>
+                                        <span class="font-medium text-gray-500 text-xs block mb-0.5">Offert :</span>
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 border border-primary-200">{{ exchange.offeredSkill.name }}</span>
                                     </div>
-                                    <div class="flex items-center mt-1">
-                                        <span class="font-medium mr-2">Demandé:</span>
-                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">{{ exchange.requestedSkill.name }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex flex-col">
-                                    <div class="text-sm">
-                                        <span class="font-medium">Offrant:</span> {{ exchange.offerer.fullName }}
-                                    </div>
-                                    <div class="text-sm mt-1">
-                                        <span class="font-medium">Receveur:</span> {{ exchange.receiver.fullName }}
+                                    <div>
+                                        <span class="font-medium text-gray-500 text-xs block mb-0.5">Demandé :</span>
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-secondary-100 text-secondary-800 border border-secondary-200">{{ exchange.requestedSkill.name }}</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    {% if exchange.status == 'pending' %}bg-yellow-100 text-yellow-800
-                                    {% elseif exchange.status == 'accepted' %}bg-blue-100 text-blue-800
-                                    {% elseif exchange.status == 'rejected' %}bg-red-100 text-red-800
-                                    {% elseif exchange.status == 'completed' %}bg-green-100 text-green-800
+                            <td class="px-6 py-4 align-top">
+                                <div class="space-y-1.5">
+                                    <div>
+                                        <span class="font-medium text-gray-500 text-xs block mb-0.5">Offrant :</span> 
+                                        <span class="text-sm text-gray-800">{{ exchange.offerer.fullName }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-medium text-gray-500 text-xs block mb-0.5">Receveur :</span> 
+                                        <span class="text-sm text-gray-800">{{ exchange.receiver.fullName }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 align-top">
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border
+                                    {% if exchange.status == 'pending' %}bg-yellow-100 text-yellow-800 border-yellow-300
+                                    {% elseif exchange.status == 'accepted' %}bg-secondary-100 text-secondary-800 border-secondary-300
+                                    {% elseif exchange.status == 'rejected' %}bg-red-100 text-red-800 border-red-300
+                                    {% elseif exchange.status == 'completed' %}bg-green-100 text-green-800 border-green-300
+                                    {% else %}bg-gray-100 text-gray-800 border-gray-300
                                     {% endif %}">
                                     {{ exchange.status|capitalize }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-500">
-                                {{ exchange.createdAt ? exchange.createdAt|date('d/m/Y') : '' }}
+                            <td class="px-6 py-4 text-sm text-gray-600 align-top">
+                                {{ exchange.createdAt ? exchange.createdAt|date('d/m/Y H:i') : '' }}
                             </td>
-                            <td class="px-6 py-4 text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ path('app_exchange_show', {'id': exchange.id}) }}" class="text-blue-600 hover:text-blue-900">Voir</a>
+                            <td class="px-6 py-4 align-top">
+                                <div class="flex items-center space-x-2">
+                                    <a href="{{ path('app_exchange_show', {'id': exchange.id}) }}" class="btn-icon text-primary-600 hover:text-primary-800" title="Voir les détails">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
+                                    </a>
                                     {% if is_granted('EDIT', exchange) %}
-                                        <a href="{{ path('app_exchange_edit', {'id': exchange.id}) }}" class="text-yellow-600 hover:text-yellow-900">Modifier</a>
+                                        <a href="{{ path('app_exchange_edit', {'id': exchange.id}) }}" class="btn-icon text-accent-600 hover:text-accent-800" title="Modifier l'échange">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                                        </a>
                                     {% endif %}
+                                    {# Add other actions like accept/reject/complete here if needed, with appropriate is_granted checks #}
                                 </div>
                             </td>
                         </tr>
@@ -81,32 +133,47 @@
                     </tbody>
                 </table>
                 {% else %}
-                <div class="p-6 text-center text-gray-500">
-                    Aucun échange trouvé. Commencez par proposer un échange de compétences !
+                <div class="text-center py-16 px-6">
+                    <svg class="mx-auto h-16 w-16 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <h3 class="mt-4 text-lg font-medium text-gray-700">Aucun échange trouvé</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Vous n'avez aucun échange pour le moment.
+                    </p>
+                    <div class="mt-6">
+                        <a href="{{ path('app_exchange_new') }}" class="btn-premium bg-accent-500 hover:bg-accent-600 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                            </svg>
+                            Proposer votre premier échange
+                        </a>
+                    </div>
                 </div>
                 {% endif %}
             </div>
         </div>
 
-        <div class="mt-6">
-            <h2 class="text-xl font-semibold mb-4">Légende des statuts</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="flex items-center">
-                    <span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2">Pending</span>
-                    <span class="text-gray-600">En attente d'acceptation</span>
+        <div class="mt-12 bg-gray-50 p-8 rounded-xl premium-shadow-sm">
+            <h2 class="text-2xl font-semibold text-primary-700 mb-6 text-center">Légende des Statuts</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% set statuses = [
+                    {'name': 'Pending', 'label': 'En attente', 'colors': 'bg-yellow-100 text-yellow-800 border-yellow-300', 'icon': 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'},
+                    {'name': 'Accepted', 'label': 'Accepté', 'colors': 'bg-secondary-100 text-secondary-800 border-secondary-300', 'icon': 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'},
+                    {'name': 'Rejected', 'label': 'Refusé', 'colors': 'bg-red-100 text-red-800 border-red-300', 'icon': 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'},
+                    {'name': 'Completed', 'label': 'Terminé', 'colors': 'bg-green-100 text-green-800 border-green-300', 'icon': 'M5 13l4 4L19 7'}
+                ] %}
+                {% for status in statuses %}
+                <div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <span class="px-4 py-1.5 inline-flex text-sm leading-5 font-bold rounded-full border {{ status.colors }} mb-3">
+                        {{ status.name }}
+                    </span>
+                    <svg class="h-8 w-8 {{ status.colors|replace({'bg-': 'text-', '-100': '-500', '-300': '-500'})|replace({'border-': ''}) }} mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ status.icon }}" />
+                    </svg>
+                    <span class="text-sm text-gray-700 font-medium text-center">{{ status.label }}</span>
                 </div>
-                <div class="flex items-center">
-                    <span class="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold mr-2">Accepted</span>
-                    <span class="text-gray-600">Échange accepté, en cours</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="px-2 py-1 rounded-full bg-red-100 text-red-800 text-sm font-semibold mr-2">Rejected</span>
-                    <span class="text-gray-600">Échange refusé</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="px-2 py-1 rounded-full bg-green-100 text-green-800 text-sm font-semibold mr-2">Completed</span>
-                    <span class="text-gray-600">Échange terminé</span>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

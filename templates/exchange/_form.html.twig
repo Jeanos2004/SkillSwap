@@ -1,45 +1,79 @@
-{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+{{ form_start(form, {'attr': {'class': 'space-y-8', 'data-aos': 'fade-up', 'data-aos-duration': '800'}}) }}
     {% if form_errors(form) %}
-        <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
-            {{ form_errors(form) }}
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-md premium-shadow-sm" role="alert" data-aos="fade-right" data-aos-delay="200">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">Veuillez corriger les erreurs suivantes :</p>
+                    <div class="mt-1 text-sm">
+                        {{ form_errors(form) }}
+                    </div>
+                </div>
+            </div>
         </div>
     {% endif %}
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="space-y-4">
-            <h3 class="text-lg font-medium">Compétence offerte</h3>
-            <div>
-                {{ form_label(form.offeredSkill, 'Compétence que vous proposez', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                {{ form_widget(form.offeredSkill, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
-                {{ form_errors(form.offeredSkill, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-                <p class="text-gray-500 text-sm mt-1">Sélectionnez la compétence que vous souhaitez partager</p>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ offeredSkill: '', requestedSkill: '' }">
+        <div class="bg-white rounded-xl p-6 premium-shadow transition-all duration-300 hover:shadow-lg" data-aos="fade-right" data-aos-delay="100">
+            <h3 class="text-xl font-semibold text-primary-700 mb-6 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+                </svg>
+                Compétence offerte
+            </h3>
+            <div class="space-y-6">
+                <div class="transition-all duration-300 transform hover:translate-y-[-2px]">
+                    {{ form_label(form.offeredSkill, 'Compétence que vous proposez', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                    {{ form_widget(form.offeredSkill, {'attr': {'class': 'block w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200', 'x-model': 'offeredSkill'}}) }}
+                    {{ form_errors(form.offeredSkill, {'attr': {'class': 'text-red-500 text-sm mt-1.5'}}) }}
+                    <p class="text-gray-500 text-xs mt-2 italic">Sélectionnez la compétence que vous souhaitez partager</p>
+                </div>
 
-            <div>
-                {{ form_label(form.receiver, 'Destinataire', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                {{ form_widget(form.receiver, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
-                {{ form_errors(form.receiver, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-                <p class="text-gray-500 text-sm mt-1">Choisissez l'utilisateur avec qui vous souhaitez échanger</p>
+                <div class="transition-all duration-300 transform hover:translate-y-[-2px]">
+                    {{ form_label(form.receiver, 'Destinataire', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                    {{ form_widget(form.receiver, {'attr': {'class': 'block w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200'}}) }}
+                    {{ form_errors(form.receiver, {'attr': {'class': 'text-red-500 text-sm mt-1.5'}}) }}
+                    <p class="text-gray-500 text-xs mt-2 italic">Choisissez l'utilisateur avec qui vous souhaitez échanger</p>
+                </div>
             </div>
         </div>
 
-        <div class="space-y-4">
-            <h3 class="text-lg font-medium">Compétence demandée</h3>
-            <div>
-                {{ form_label(form.requestedSkill, 'Compétence que vous souhaitez recevoir', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                {{ form_widget(form.requestedSkill, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
-                {{ form_errors(form.requestedSkill, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-                <p class="text-gray-500 text-sm mt-1">Sélectionnez la compétence que vous souhaitez apprendre</p>
+        <div class="bg-white rounded-xl p-6 premium-shadow transition-all duration-300 hover:shadow-lg" data-aos="fade-left" data-aos-delay="300">
+            <h3 class="text-xl font-semibold text-secondary-700 mb-6 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Compétence demandée
+            </h3>
+            <div class="space-y-6">
+                <div class="transition-all duration-300 transform hover:translate-y-[-2px]">
+                    {{ form_label(form.requestedSkill, 'Compétence que vous souhaitez recevoir', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                    {{ form_widget(form.requestedSkill, {'attr': {'class': 'block w-full rounded-lg border-gray-300 shadow-sm focus:ring-secondary-500 focus:border-secondary-500 transition-colors duration-200', 'x-model': 'requestedSkill'}}) }}
+                    {{ form_errors(form.requestedSkill, {'attr': {'class': 'text-red-500 text-sm mt-1.5'}}) }}
+                    <p class="text-gray-500 text-xs mt-2 italic">Sélectionnez la compétence que vous souhaitez apprendre</p>
+                </div>
             </div>
         </div>
     </div>
 
     {% if form.details is defined %}
-    <div class="mt-4">
-        {{ form_label(form.details, 'Détails de l\'échange', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-        {{ form_widget(form.details, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500', 'rows': 4}}) }}
-        {{ form_errors(form.details, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-        <p class="text-gray-500 text-sm mt-1">Précisez les détails de votre proposition d'échange (optionnel)</p>
+    <div class="bg-white rounded-xl p-6 premium-shadow mt-6 transition-all duration-300 hover:shadow-lg" data-aos="fade-up" data-aos-delay="400">
+        <h3 class="text-xl font-semibold text-accent-600 mb-6 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-accent-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Détails de l'échange
+        </h3>
+        <div class="transition-all duration-300">
+            {{ form_label(form.details, 'Précisez votre proposition', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+            {{ form_widget(form.details, {'attr': {'class': 'block w-full rounded-lg border-gray-300 shadow-sm focus:ring-accent-500 focus:border-accent-500 transition-colors duration-200', 'rows': 5, 'placeholder': 'Décrivez en détail votre proposition d\'échange...'}}) }}
+            {{ form_errors(form.details, {'attr': {'class': 'text-red-500 text-sm mt-1.5'}}) }}
+            <p class="text-gray-500 text-xs mt-2 italic">Précisez les détails de votre proposition d'échange (optionnel)</p>
+        </div>
     </div>
     {% endif %}
 
@@ -47,9 +81,12 @@
         {{ form_rest(form) }}
     </div>
 
-    <div class="flex justify-end mt-6">
-        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            {{ button_label|default('Enregistrer') }}
+    <div class="flex justify-end pt-8 border-t border-gray-200 mt-10" data-aos="fade-up" data-aos-delay="500">
+        <button type="submit" class="btn-premium bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-medium px-8 py-3 rounded-lg shadow-lg hover:shadow-primary-500/50 transition-all duration-300 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            {{ button_label|default('Enregistrer l\'échange') }}
         </button>
     </div>
 {{ form_end(form) }}
