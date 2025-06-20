@@ -123,6 +123,7 @@
                 /* Animation du menu mobile */
                 #mobile-menu {
                     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                    background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%);
                 }
                 
                 #mobile-menu:not(.hidden) {
@@ -132,7 +133,7 @@
                 
                 /* Mise à jour du dégradé du header */
                 .header-gradient {
-                    background: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-900) 100%);
+                    background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%);
                 }
                 
                 /* Mise à jour du footer */
@@ -238,7 +239,7 @@
         {% endblock %}
     </head>
     <body class="flex flex-col min-h-screen bg-gray-50 font-['Poppins']">
-        <header class="bg-header-gradient text-white shadow-xl sticky top-0 z-50">
+        <header class="text-white shadow-xl sticky top-0 z-50" style="background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%);">
             <div class="container mx-auto px-4 py-4">
                 <div class="flex justify-between items-center">
                     <!-- Logo et titre du site -->
@@ -257,7 +258,7 @@
                     </div>
 
                     <!-- Navigation desktop -->
-                    <nav class="hidden md:flex items-center space-x-8">
+                    <nav class="hidden  md:flex items-center space-x-8">
                         <a href="{{ path('app_home') }}" class="nav-link text-white hover:text-accent-300 font-medium px-2 py-1 transition-all duration-300 ease-in-out">Accueil</a>
                         <a href="{{ path('app_skill_index') }}" class="nav-link text-white hover:text-accent-300 font-medium px-2 py-1 transition-all duration-300 ease-in-out">Compétences</a>
                         <a href="{{ path('app_exchange_index') }}" class="nav-link text-white hover:text-accent-300 font-medium px-2 py-1 transition-all duration-300 ease-in-out">Échanges</a>
