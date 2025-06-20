@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de l'avis{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">Détail de l'avis</h1>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-lg {% if label == 'success' %}bg-green-100 text-green-800{% elseif label == 'error' %}bg-red-100 text-red-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h2 class="text-xl font-semibold">
+                        Avis de <span class="text-blue-600">{{ review.reviewer.fullName }}</span> 
+                        sur <span class="text-blue-600">{{ review.reviewee.fullName }}</span>
+                    </h2>
+                    <div class="text-sm text-gray-500 mt-1">Créé le {{ review.createdAt|date('d/m/Y à H:i') }}</div>
+                </div>
+                <div class="flex items-center">
+                    {% for i in 1..5 %}
+                        {% if i <= review.rating %}
+                            <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        {% else %}
+                            <svg class="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-md mb-4">
+                <h3 class="text-lg font-medium mb-2">Commentaire</h3>
+                <p class="text-gray-700 whitespace-pre-line">{{ review.comment|nl2br }}</p>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-lg font-medium mb-2">Détails de l'échange</h3>
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <div class="flex flex-col md:flex-row md:items-center mb-2">
+                        <span class="font-medium mr-2">Compétence offerte:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">{{ review.exchange.offeredSkill.name }}</span>
+                        <span class="mx-2 text-gray-400">par</span>
+                        <span class="font-medium">{{ review.exchange.offerer.fullName }}</span>
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-center">
+                        <span class="font-medium mr-2">Compétence demandée:</span>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded">{{ review.exchange.requestedSkill.name }}</span>
+                        <span class="mx-2 text-gray-400">par</span>
+                        <span class="font-medium">{{ review.exchange.receiver.fullName }}</span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="font-medium mr-2">Statut:</span>
+                        <span class="px-2 py-1 rounded {% if review.exchange.status == 'completed' %}bg-green-100 text-green-800{% elseif review.exchange.status == 'accepted' %}bg-blue-100 text-blue-800{% elseif review.exchange.status == 'rejected' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                            {{ review.exchange.status|capitalize }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex space-x-2">
+                <a href="{{ path('app_exchange_show', {'id': review.exchange.id}) }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Voir l'échange
+                </a>
+                {% if app.user == review.reviewer %}
+                    <a href="{{ path('app_review_edit', {'id': review.id}) }}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                        Modifier
+                    </a>
+                    <form method="post" action="{{ path('app_review_delete', {'id': review.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet avis?');" class="inline-block">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ review.id) }}">
+                        <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Supprimer</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ path('app_review_index') }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                Retour à la liste des avis
+            </a>
+        </div>
+    </div>
+{% endblock %}

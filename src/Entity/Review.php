@@ -31,6 +31,11 @@ class Review
 
     #[ORM\ManyToOne(inversedBy: 'reviews')]
     private ?Exchange $exchange = null;
+    
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
