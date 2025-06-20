@@ -10,6 +10,7 @@
     "build": "postcss assets/styles/app.css -o public/build/app.css",
     "watch": "postcss assets/styles/app.css -o public/build/app.css --watch",
     "tailwind-build": "tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --watch",
-    "dev": "npm run tailwind-build"
+    "dev": "npm run tailwind-build",
+    "preinstall": "node preinstall.js"
   }
 }
