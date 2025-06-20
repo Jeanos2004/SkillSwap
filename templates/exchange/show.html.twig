@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail de l'échange - {{ exchange.offeredSkill.name }} vs {{ exchange.requestedSkill.name }} - SkillSwap{% endblock %}
+{% block title %}Détail de l'échange - {{ exchange.offeredSkill.title }} vs {{ exchange.requestedSkill.title }} - SkillSwap{% endblock %}
 
 {% block body %}
     <div class="container mx-auto px-4 py-12">
         <div class="mb-10">
             <h1 class="text-4xl font-bold text-primary-800 mb-2">Détail de l'Échange</h1>
-            <p class="text-xl text-gray-600">{{ exchange.offeredSkill.name }} <span class="text-gray-400 font-light">vs</span> {{ exchange.requestedSkill.name }}</p>
+            <p class="text-xl text-gray-600">{{ exchange.offeredSkill.title }} <span class="text-gray-400 font-light">vs</span> {{ exchange.requestedSkill.title }}</p>
         </div>
 
         {% for label, messages in app.flashes %}
@@ -74,7 +74,7 @@
                 <div class="bg-gray-50 p-6 rounded-xl premium-shadow-sm">
                     <h3 class="text-xl font-semibold text-primary-600 mb-4">Compétence Offerte</h3>
                     <div class="mb-3">
-                        <span class="px-3 py-1.5 text-sm font-semibold rounded-full bg-primary-100 text-primary-800 border border-primary-200">{{ exchange.offeredSkill.name }}</span>
+                        <span class="px-3 py-1.5 text-sm font-semibold rounded-full bg-primary-100 text-primary-800 border border-primary-200">{{ exchange.offeredSkill.title }}</span>
                     </div>
                     <div class="text-gray-700 mb-3 prose prose-sm max-w-none">
                         {{ exchange.offeredSkill.description|nl2br }}
@@ -88,7 +88,7 @@
                 <div class="bg-gray-50 p-6 rounded-xl premium-shadow-sm">
                     <h3 class="text-xl font-semibold text-primary-600 mb-4">Compétence Demandée</h3>
                     <div class="mb-3">
-                        <span class="px-3 py-1.5 text-sm font-semibold rounded-full bg-secondary-100 text-secondary-800 border border-secondary-200">{{ exchange.requestedSkill.name }}</span>
+                        <span class="px-3 py-1.5 text-sm font-semibold rounded-full bg-secondary-100 text-secondary-800 border border-secondary-200">{{ exchange.requestedSkill.title }}</span>
                     </div>
                     <div class="text-gray-700 mb-3 prose prose-sm max-w-none">
                         {{ exchange.requestedSkill.description|nl2br }}
