@@ -24,8 +24,11 @@ class SkillCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('title', 'Titre'),
             TextEditorField::new('description', 'Description')->hideOnIndex(),
-            AssociationField::new('category', 'Catégorie'),
+            AssociationField::new('category')
+                ->setFormTypeOption('choice_label', 'name') // Spécifie la propriété à afficher
+                ->setLabel('Catégorie'),
             AssociationField::new('user', 'Créé par')
+                ->setFormTypeOption('choice_label', 'email') // ou 'fullName'
                 ->setTemplatePath('admin/fields/user.html.twig'),
             DateTimeField::new('createdAt', 'Créé le')
                 ->setFormat('dd/MM/yyyy HH:mm')

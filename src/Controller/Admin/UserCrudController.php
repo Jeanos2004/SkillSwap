@@ -34,7 +34,7 @@ class UserCrudController extends AbstractCrudController
             IdField::new('id')->onlyOnIndex(),
             TextField::new('fullName', 'Nom complet'),
             EmailField::new('email'),
-            BooleanField::new('isActive', 'Actif'),
+            /* BooleanField::new('isActive', 'Actif'), */
             ArrayField::new('roles', 'Rôles'),
             // Supprimez les références à createdAt s'il n'existe pas
             // DateTimeField::new('createdAt', 'Créé le')->onlyOnDetail(),

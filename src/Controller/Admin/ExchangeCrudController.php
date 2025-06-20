@@ -92,6 +92,9 @@ class ExchangeCrudController extends AbstractCrudController
         ];
     }
 
+
+
+    
     public function configureActions(Actions $actions): Actions
     {
         return $actions
@@ -101,6 +104,9 @@ class ExchangeCrudController extends AbstractCrudController
             })
             ->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
                 return $action->setIcon('fa fa-trash')->setLabel(false);
+            })
+            ->update(Crud::PAGE_INDEX, Action::DETAIL, function (Action $action) {
+                return $action->setIcon('fa fa-eye')->setLabel(false);
             });
     }
 }

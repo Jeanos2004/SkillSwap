@@ -19,11 +19,13 @@ class SkillForm extends AbstractType
             ->add('description')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name', // Spécifie la propriété à afficher
+                'label' => 'Catégorie'
             ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'email', // ou 'fullName' selon ce que vous voulez afficher
+                'label' => 'Utilisateur'
             ])
         ;
     }
