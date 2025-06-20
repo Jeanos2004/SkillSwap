@@ -1,0 +1,16 @@
+{# templates/admin/fields/reviews.html.twig #}
+{% if field.value is not empty %}
+    <div>
+        {% for review in field.value %}
+            <div class="mb-2 p-2 border rounded">
+                <strong>{{ review.rating }}/5</strong>
+                <p class="mb-1">{{ review.comment }}</p>
+                <small class="text-muted">
+                    Par {{ review.reviewer.email }} le {{ review.createdAt|date('d/m/Y H:i') }}
+                </small>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <span class="text-muted">Aucun avis</span>
+{% endif %}

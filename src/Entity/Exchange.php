@@ -60,6 +60,7 @@ class Exchange
 
         return $this;
     }
+    
 
     public function getCreatedAt(): ?\DateTime
     {
