@@ -133,7 +133,8 @@
                 
                 /* Mise à jour du dégradé du header */
                 .header-gradient {
-                    background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%);
+                    background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%) !important;
+                    background-color: var(--primary-800) !important;
                 }
                 
                 /* Mise à jour du footer */
@@ -239,7 +240,7 @@
         {% endblock %}
     </head>
     <body class="flex flex-col min-h-screen bg-gray-50 font-['Poppins']">
-        <header class="text-white shadow-xl sticky top-0 z-50" style="background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%);">
+        <header class="header-gradient text-white shadow-xl sticky top-0 z-50 bg-primary-800">
             <div class="container mx-auto px-4 py-4">
                 <div class="flex justify-between items-center">
                     <!-- Logo et titre du site -->
