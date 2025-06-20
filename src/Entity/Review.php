@@ -20,8 +20,8 @@ class Review
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
-    #[ORM\Column]
-    private ?\DateTime $createdAt = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'givenReviews')]
     private ?User $reviewer = null;
@@ -71,12 +71,11 @@ class Review
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+{
+    $this->createdAt = $createdAt;
+    return $this;
+}
 
     public function getReviewer(): ?User
     {

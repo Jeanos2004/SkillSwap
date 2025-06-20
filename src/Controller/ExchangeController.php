@@ -6,6 +6,8 @@ use App\Entity\Exchange;
 use App\Form\ExchangeForm;
 use App\Repository\ExchangeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Review;
+use App\Form\ReviewType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,19 +62,55 @@ final class ExchangeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_exchange_show', methods: ['GET'])]
-    public function show(Exchange $exchange): Response
+    #[Route('/{id}', name: 'app_exchange_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, Exchange $exchange, EntityManagerInterface $entityManager): Response
     {
-        // Vérifier que l'utilisateur est autorisé à voir cet échange
-        if (!$this->isGranted('ROLE_ADMIN') && 
-            $exchange->getOfferer() !== $this->getUser() && 
-            $exchange->getReceiver() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à voir cet échange.');
+        // Vérification des autorisations
+        if ($exchange->getOfferer() !== $this->getUser() && 
+            $exchange->getReceiver() !== $this->getUser() && 
+            !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas accès à cet échange.');
         }
+
+        // Création du formulaire d'avis
+        $review = new Review();
+        $reviewForm = $this->createForm(ReviewType::class, $review);
+        $reviewForm->handleRequest($request);
         
+        // Traitement du formulaire si soumis
+        if ($reviewForm->isSubmitted() && $reviewForm->isValid()) {
+            // Vérifier que l'utilisateur peut laisser un avis
+            if ($exchange->getStatus() !== 'completed') {
+                $this->addFlash('error', 'Vous ne pouvez pas laisser d\'avis sur un échange non terminé.');
+                return $this->redirectToRoute('app_exchange_show', ['id' => $exchange->getId()]);
+            }
+            
+            // Vérifier que l'utilisateur n'a pas déjà laissé un avis
+            $existingReview = $entityManager->getRepository(Review::class)->findOneBy([
+                'exchange' => $exchange,
+                'reviewer' => $this->getUser()
+            ]);
+            
+            if ($existingReview) {
+                $this->addFlash('error', 'Vous avez déjà laissé un avis pour cet échange.');
+                return $this->redirectToRoute('app_exchange_show', ['id' => $exchange->getId()]);
+            }
+            
+            // Enregistrer l'avis
+            $review->setExchange($exchange);
+            $review->setReviewer($this->getUser());
+            $review->setCreatedAt(new \DateTimeImmutable());
+            
+            $entityManager->persist($review);
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Votre avis a été enregistré avec succès !');
+            return $this->redirectToRoute('app_exchange_show', ['id' => $exchange->getId()]);
+        }
+
         return $this->render('exchange/show.html.twig', [
             'exchange' => $exchange,
-            'is_admin' => $this->isGranted('ROLE_ADMIN'),
+            'reviewForm' => $reviewForm->createView(),
         ]);
     }
 
@@ -106,7 +144,7 @@ final class ExchangeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_exchange_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_exchange_delete', methods: ['POST'])]
     public function delete(Request $request, Exchange $exchange, EntityManagerInterface $entityManager): Response
     {
         // Vérifier que l'utilisateur est autorisé à supprimer cet échange
@@ -128,7 +166,61 @@ final class ExchangeController extends AbstractController
 
         return $this->redirectToRoute('app_exchange_index', [], Response::HTTP_SEE_OTHER);
     }
-    
+    #[isGranted('ROLE_USER')]
+    #[Route('/{id}/review', name: 'app_exchange_review', methods: ['POST'])]
+    public function addReview(Request $request, Exchange $exchange, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        
+        // Vérifier que l'utilisateur est connecté
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour laisser un avis.');
+        }
+        
+        // Vérifier que l'utilisateur est soit l'offreur soit le receveur
+        if ($exchange->getOfferer() !== $user && $exchange->getReceiver() !== $user) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas laisser d\'avis sur cet échange.');
+        }
+        
+        // Vérifier que l'échange est bien terminé
+        if ($exchange->getStatus() !== 'completed') {
+            $this->addFlash('error', 'Vous ne pouvez pas laisser d\'avis sur un échange non terminé.');
+            return $this->redirectToRoute('app_exchange_show', ['id' => $exchange->getId()]);
+        }
+        
+        // Vérifier que l'utilisateur n'a pas déjà laissé un avis
+        $existingReview = $entityManager->getRepository(Review::class)->findOneBy([
+            'exchange' => $exchange,
+            'reviewer' => $user
+        ]);
+        
+        if ($existingReview) {
+            $this->addFlash('error', 'Vous avez déjà laissé un avis pour cet échange.');
+            return $this->redirectToRoute('app_exchange_show', ['id' => $exchange->getId()]);
+        }
+        
+        $review = new Review();
+        $form = $this->createForm(ReviewType::class, $review);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $review->setExchange($exchange);
+            $review->setReviewer($user);
+            $review->setCreatedAt(new \DateTime());
+            
+            $entityManager->persist($review);
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Votre avis a été enregistré avec succès !');
+        } else {
+            // Afficher les erreurs de validation
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+        }
+
+        return $this->redirectToRoute('app_exchange_show', ['id' => $exchange->getId()]);
+    }
     #[Route('/{id}/accept', name: 'app_exchange_accept', methods: ['POST'])]
     public function accept(Request $request, Exchange $exchange, EntityManagerInterface $entityManager): Response
     {

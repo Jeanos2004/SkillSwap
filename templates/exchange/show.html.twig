@@ -100,7 +100,55 @@
                 </div>
             </div>
         </div>
-
+        {% if exchange.status == 'completed' %}
+            {% if (app.user == exchange.offerer or app.user == exchange.receiver) and not exchange.reviews|filter(review => review.reviewer == app.user)|length %}
+                <div class="bg-white premium-shadow rounded-xl p-8 mt-10" id="review-form-container">
+                    <h2 class="text-2xl font-semibold text-primary-700 mb-6">Donnez votre avis sur cet échange</h2>
+                    {{ form_start(reviewForm, {'action': path('app_exchange_review', {                                                            
+                        'id': exchange.id}),
+                        'method': 'POST',
+                        'attr': {'class': 'space-y-6', 'data-turbo': 'false'}}) }}
+                        <div class="space-y-2">
+                            {{ form_label(reviewForm.rating, 'Votre note', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="flex flex-wrap gap-2">
+                                {% for child in reviewForm.rating.children %}
+                                    <div class="flex items-center">
+                                        {{ form_widget(child, {'attr': {'class': 'hidden'}}) }}
+                                        <label for="{{ child.vars.id }}" class="px-4 py-2 border rounded-md cursor-pointer transition-colors duration-200
+                                            {{ child.vars.checked ? 'bg-primary-100 border-primary-500 text-primary-700' : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50' }}">
+                                            {{ child.vars.label|trans }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {{ form_errors(reviewForm.rating) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(reviewForm.comment, 'Votre commentaire (facultatif)', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(reviewForm.comment, {'attr': {
+                                'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500',
+                                'rows': 4,
+                                'placeholder': 'Partagez votre expérience concernant cet échange...'
+                            }}) }}
+                            {{ form_errors(reviewForm.comment) }}
+                        </div>
+                        
+                        <div class="flex justify-end space-x-3 pt-2">
+                            <button type="button" class="btn-secondary" onclick="document.getElementById('review-form-container').scrollIntoView({behavior: 'smooth'})">
+                                Annuler
+                            </button>
+                            <button type="submit" class="btn-premium bg-primary-500 border-primary-500 px-6 py-2 hover:bg-primary-600 hover:border-primary-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                Envoyer l'avis
+                            </button>
+                        </div>
+                    {{ form_end(reviewForm) }}
+                </div>
+            {% endif %}
+        {% endif %}
         {% if exchange.reviews|length > 0 %}
         <div class="bg-white premium-shadow rounded-xl p-8 mt-10">
             <h2 class="text-2xl font-semibold text-primary-700 mb-6">Avis sur cet échange</h2>
@@ -190,8 +238,38 @@
             {% endif %}
 
             {% if is_granted('DELETE', exchange) %}
-                {{ include('exchange/_delete_form.html.twig') }}
-            {% endif %}
+            <form method="post" action="{{ path('app_exchange_delete', {'id': exchange.id}) }}" class="inline">
+                <input type="hidden" name="_method" value="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ exchange.id) }}">
+                <button type="submit" class="btn btn-danger" 
+                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet échange ?')">
+                Supprimer
+                </button>
+            </form>
+{% endif %}
         </div>
     </div>
+
+    {% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Mise en surbrillance de la note sélectionnée
+        document.querySelectorAll('input[name="review[rating]"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Retirer la classe active de tous les labels
+                document.querySelectorAll('label[for^="review_rating"]').forEach(label => {
+                    label.classList.remove('bg-primary-100', 'border-primary-500', 'text-primary-700');
+                    label.classList.add('border-gray-300', 'text-gray-700');
+                });
+                
+                // Ajouter la classe active au label sélectionné
+                const selectedLabel = document.querySelector(`label[for="${this.id}"]`);
+                if (selectedLabel) {
+                    selectedLabel.classList.add('bg-primary-100', 'border-primary-500', 'text-primary-700');
+                    selectedLabel.classList.remove('border-gray-300', 'text-gray-700');
+                }
+            });
+        });
+    </script>
+    {% endblock %}
 {% endblock %}

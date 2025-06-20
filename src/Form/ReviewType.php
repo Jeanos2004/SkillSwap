@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class ReviewType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('rating', ChoiceType::class, [
@@ -35,8 +35,7 @@ class ReviewType extends AbstractType
                     new Range([
                         'min' => 1,
                         'max' => 5,
-                        'minMessage' => 'La note minimale est 1',
-                        'maxMessage' => 'La note maximale est 5',
+                        'notInRangeMessage' => 'La note doit être comprise entre {{ min }} et {{ max }}',
                     ]),
                 ],
             ])
@@ -54,9 +53,9 @@ class ReviewType extends AbstractType
                         'maxMessage' => 'Le commentaire ne peut pas dépasser {{ limit }} caractères',
                     ]),
                 ],
-            ])
-        ;
+            ]);
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
