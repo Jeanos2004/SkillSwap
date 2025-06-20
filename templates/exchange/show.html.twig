@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exchange{% endblock %}
+
+{% block body %}
+    <h1>Exchange</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ exchange.id }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ exchange.status }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ exchange.createdAt ? exchange.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_exchange_index') }}">back to list</a>
+
+    <a href="{{ path('app_exchange_edit', {'id': exchange.id}) }}">edit</a>
+
+    {{ include('exchange/_delete_form.html.twig') }}
+{% endblock %}
