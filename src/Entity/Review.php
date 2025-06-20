@@ -26,9 +26,12 @@ class Review
     #[ORM\ManyToOne(inversedBy: 'givenReviews')]
     private ?User $reviewer = null;
     
-    #[ORM\ManyToOne(inversedBy: 'receivedReviews')]
-    private ?User $reviewee = null;
-
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receivedReviews")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $reviewee;
+    
     #[ORM\ManyToOne(inversedBy: 'reviews')]
     private ?Exchange $exchange = null;
     

@@ -208,6 +208,11 @@ final class ExchangeController extends AbstractController
             $review->setReviewer($user);
             $review->setCreatedAt(new \DateTime());
             
+            $reviewee = $exchange->getOfferer() === $user ? $exchange->getReceiver() : $exchange->getOfferer();
+            $review->setReviewee($reviewee);
+            $review->setCreatedAt(new \DateTimeImmutable());
+
+
             $entityManager->persist($review);
             $entityManager->flush();
             
